@@ -71,11 +71,27 @@
 
     p {
       margin-top: 0;
+      margin-bottom: 0;
 
       color: #555;
 
       line-height: 1.5;
     }
+
+
+    /* ========================================================
+       LOCATION WARNING
+       ======================================================== */
+
+    .gate-warning {
+      margin-top: 8px;
+
+      color: #777;
+
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
 
     /* ========================================================
        SLIDER
@@ -167,6 +183,11 @@
       color: #888;
     }
 
+
+    /* ========================================================
+       STATUS
+       ======================================================== */
+
     #status {
       margin-top: 20px;
 
@@ -187,6 +208,120 @@
 
     .info {
       color: #555;
+    }
+
+
+    /* ========================================================
+       CONFIRMATION BOX
+       ======================================================== */
+
+    .confirmation {
+      display: none;
+
+      margin-top: 20px;
+
+      padding: 18px;
+
+      background: #f8f9fa;
+
+      border: 1px solid #e1e1e1;
+
+      border-radius: 14px;
+    }
+
+    .confirmation.visible {
+      display: block;
+    }
+
+    .confirmation-text {
+      margin: 0 0 15px 0;
+
+      color: #333;
+
+      font-size: 16px;
+
+      font-weight: 600;
+
+      line-height: 1.4;
+    }
+
+    .confirmation-buttons {
+      display: flex;
+
+      gap: 10px;
+
+      justify-content: center;
+    }
+
+    .confirmation-button {
+      flex: 1;
+
+      min-height: 44px;
+
+      padding: 10px 14px;
+
+      border: none;
+
+      border-radius: 10px;
+
+      font-family: inherit;
+
+      font-size: 15px;
+
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.1s,
+        opacity 0.1s;
+    }
+
+    .confirmation-button:active {
+      transform: scale(0.97);
+    }
+
+    .cancel-button {
+      background: #e9ecef;
+
+      color: #333;
+    }
+
+    .open-button {
+      background: #007bff;
+
+      color: white;
+    }
+
+    .confirmation-button:disabled {
+      opacity: 0.6;
+
+      cursor: not-allowed;
+    }
+
+
+    /* ========================================================
+       MOBILE
+       ======================================================== */
+
+    @media (max-width: 420px) {
+
+      .card {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .confirmation-buttons {
+        flex-direction: column;
+      }
+
+      .confirmation-button {
+        width: 100%;
+      }
+
     }
 
   </style>
@@ -217,6 +352,11 @@
     </p>
 
 
+    <p class="gate-warning">
+      Please slide only when you are at the gate.
+    </p>
+
+
     <!-- ======================================================
          SLIDER
          ====================================================== -->
@@ -235,6 +375,42 @@
         class="slider-handle"
       >
         →
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         CONFIRMATION
+         ====================================================== -->
+
+    <div
+      id="confirmation"
+      class="confirmation"
+    >
+
+      <p class="confirmation-text">
+        Are you sure you want to open the gate?
+      </p>
+
+      <div class="confirmation-buttons">
+
+        <button
+          id="cancelButton"
+          class="confirmation-button cancel-button"
+          type="button"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="confirmButton"
+          class="confirmation-button open-button"
+          type="button"
+        >
+          Yes, open the gate
+        </button>
+
       </div>
 
     </div>
@@ -264,6 +440,16 @@
 
     const handle =
       document.getElementById("sliderHandle");
+
+    const confirmation =
+      document.getElementById("confirmation");
+
+    const cancelButton =
+      document.getElementById("cancelButton");
+
+    const confirmButton =
+      document.getElementById("confirmButton");
+
 
     let dragging = false;
 
@@ -298,6 +484,30 @@
       handle.style.left = "6px";
 
       slider.classList.remove("disabled");
+
+    }
+
+
+    // ==========================================================
+    // HIDE CONFIRMATION
+    // ==========================================================
+
+    function hideConfirmation() {
+
+      confirmation.classList.remove("visible");
+
+    }
+
+
+    // ==========================================================
+    // SHOW CONFIRMATION
+    // ==========================================================
+
+    function showConfirmation() {
+
+      confirmation.classList.add("visible");
+
+      showMessage("");
 
     }
 
@@ -416,13 +626,39 @@
         handle.style.left =
           `${max}px`;
 
-        openGate();
+        showConfirmation();
 
       } else {
 
         resetSlider();
 
       }
+
+    }
+
+
+    // ==========================================================
+    // CANCEL CONFIRMATION
+    // ==========================================================
+
+    function cancelOpening() {
+
+      hideConfirmation();
+
+      resetSlider();
+
+    }
+
+
+    // ==========================================================
+    // CONFIRM OPENING
+    // ==========================================================
+
+    function confirmOpening() {
+
+      hideConfirmation();
+
+      openGate();
 
     }
 
@@ -620,6 +856,21 @@
     handle.addEventListener(
       "pointercancel",
       endDrag
+    );
+
+
+    // ==========================================================
+    // CONFIRMATION EVENTS
+    // ==========================================================
+
+    cancelButton.addEventListener(
+      "click",
+      cancelOpening
+    );
+
+    confirmButton.addEventListener(
+      "click",
+      confirmOpening
     );
 
   </script>
