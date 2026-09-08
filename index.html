@@ -105,13 +105,15 @@
 
       display: block;
 
-      aspect-ratio: 16 / 10;
+      /*
+       * Mantiene il formato originale dell'immagine.
+       * Nessun aspect-ratio forzato e nessun object-fit: cover,
+       * quindi l'immagine non viene ritagliata.
+       */
 
-      object-fit: cover;
+      border-radius: 14px;
 
-      border-radius: 18px;
-
-      margin-bottom: 24px;
+      margin-bottom: 22px;
 
       box-shadow:
         0 8px 22px rgba(15, 23, 42, 0.12);
@@ -488,13 +490,22 @@
     }
 
 
+    /*
+     * Testo di sicurezza:
+     * nero, in grassetto e sottolineato.
+     */
+
     .confirmation-subtext {
 
       margin: -14px 0 24px 0;
 
-      color: #6b7280;
+      color: #222222;
 
       font-size: 14px;
+
+      font-weight: 700;
+
+      text-decoration: underline;
 
       line-height: 1.45;
     }
@@ -630,7 +641,7 @@
 
       .gate-image {
 
-        border-radius: 15px;
+        border-radius: 14px;
 
         margin-bottom: 20px;
       }
@@ -774,11 +785,13 @@
 
       .gate-image {
 
-        max-height: 180px;
+        /*
+         * Anche in landscape manteniamo il rapporto originale.
+         * L'altezza non viene più forzata.
+         */
 
-        aspect-ratio: 16 / 7;
-
-        object-fit: cover;
+        width: 100%;
+        height: auto;
 
         margin-bottom: 14px;
       }
